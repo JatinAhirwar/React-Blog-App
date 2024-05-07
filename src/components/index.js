@@ -4,6 +4,9 @@ import Container from './container/Container.jsx';
 import LogoutBtn from './Head/LogoutBtn.jsx';
 import Logo from './Logo.jsx';
 import Button from './Button.jsx'
+import Input from './Input.jsx';
+import RTE from './RTE.jsx';
+import Select from './Select.jsx'
 
 export {
     Header,
@@ -11,5 +14,8 @@ export {
     Container,
     LogoutBtn,
     Button,
-    Logo
+    Logo,
+    Input,
+    RTE,
+    Select
 }
