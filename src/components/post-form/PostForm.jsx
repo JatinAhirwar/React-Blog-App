@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, RTE, Select } from "..";
 import appwriteService from "../../appwrite/config";
@@ -46,7 +46,7 @@ export default function PostForm({ post }) {
                 if (dbPost) {
                     navigate(`/post/${dbPost.$id}`);
                 }
-            } else{
+            } else {
                 console.log("image is required");
             }
         }
@@ -58,12 +58,13 @@ export default function PostForm({ post }) {
                 .trim()
                 .toLowerCase()
                 .replace(/[^a-zA-Z\d\s]+/g, "-")
-                .replace(/\s/g, "-");
+                .replace(/\s/g, "-")
+                .substring(0, 36);;
 
         return "";
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const subscription = watch((value, { name }) => {
             if (name === "title") {
                 setValue("slug", slugTransform(value.title), { shouldValidate: true });
@@ -82,15 +83,16 @@ export default function PostForm({ post }) {
                     className="mb-4"
                     {...register("title", { required: true })}
                 />
-                <Input
+                {/* <Input
                     label="Slug :"
                     placeholder="Slug"
                     className="mb-4"
-                    {...register("slug", { required: true })}
+                    disable
+                    {...register("slug", { required: true, })}
                     onInput={(e) => {
                         setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
                     }}
-                />
+                /> */}
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
             </div>
             <div className="w-1/3 px-2">
