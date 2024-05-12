@@ -1,8 +1,20 @@
-#root {
+/* #root {
   max-width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+} */
+
+#root {
+  max-width: 100%;
+  margin: 0 auto;
+
+
+  /* height: 100vh; */
+  background: linear-gradient(to right top, #21c8aa, #217cf2, #00ddff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .logo {
@@ -11,27 +23,6 @@
   will-change: filter;
   transition: filter 300ms;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
 
 .card {
   padding: 2em;
@@ -39,4 +30,83 @@
 
 .read-the-docs {
   color: #888;
+}
+
+
+* {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+h4 {
+  color: #658ec6;
+}
+
+
+
+.glass {
+  height: 80%;
+  width: 60%;
+  background: linear-gradient(to right bottom,
+          rgba(255, 255, 255, 0.7),
+          rgba(255, 255, 255, 0.3));
+  border-radius: 2rem;
+  z-index: 2;
+  backdrop-filter: blur(2rem);
+  display: flex;
+}
+
+.dashboard {
+  background: linear-gradient(to right bottom,
+          rgba(255, 255, 255, 0.7),
+          rgba(255, 255, 255, 0.3));
+  display: flex;
+  width: 80vw;
+  margin: auto;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  padding: 1rem;
+  justify-content: space-evenly;
+  border-radius: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.dashboard .user img {
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgba(255, 255, 255);
+  border-radius: 50%;
+}
+
+.dashboard .user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.links {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  /* flex-wrap: wrap; */
+  align-items: center;
+  height: 100%;
+  padding: 20px 5px;
+}
+
+.link {
+  width: 100%;
+  display: flex;
+  margin: 5px 0rem;
+  padding: 1px 5rem;
+  align-items: center;
+}
+
+.link h4 {
+  padding: 0rem 15px;
 }

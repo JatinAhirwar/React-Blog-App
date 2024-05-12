@@ -16,9 +16,9 @@ function Home() {
     }, []);
 
     
-    if(!authStatus){
+    if(!authStatus && posts == ''){
         return (
-            <div className="w-full py-8 mt-4 text-center">
+            <div className="w-full py-8 mt-4 text-center min-h-screen">
                 <Container>
                     <div className="flex flex-wrap">
                         <div className="p-2 w-full">
@@ -33,13 +33,16 @@ function Home() {
     } 
 
     if (posts == ''){
-        return(<>Loading...</>)
+        return(<div className='w-full py-8 mt-4 text-center min-h-screen'>
+        
+        Loading...</div>
+        );
     }
 
     
     if (posts.length === 0) {
         return (
-            <div className="w-full py-8 mt-4 text-center">
+            <div className="w-full py-8 mt-4 text-center min-h-screen">
                 <Container>
                     <div className="flex flex-wrap">
                         <div className="p-2 w-full">
@@ -57,9 +60,9 @@ function Home() {
     return (
         <div className='w-full py-8'>
             <Container>
-                <div className='flex flex-wrap'>
-                    {posts.map((post) => (
-                        <div key={post.$id} className='p-2 w-1/4'>
+                <div className='flex flex-wrap min-h-screen'>
+                    {posts.map((post, index) => (
+                        <div key={post.$id} className={`p-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 ${index % 4 === 0 ? 'pl-0' : ''}`}>
                             <PostCard {...post} />
                         </div>
                     ))}

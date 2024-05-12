@@ -4,6 +4,8 @@ import appwriteService from "../appwrite/config";
 import { Button, Container } from "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
+import '../App.css';
+
 
 export default function Post() {
     const [post, setPost] = useState(null);
@@ -33,13 +35,13 @@ export default function Post() {
     };
 
     return post ? (
-        <div className="py-8">
+        <div className=" m-5">
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
                     <img
                         src={appwriteService.getFilePreview(post.featuredImage)}
                         alt={post.title}
-                        className="rounded-xl"
+                        className="rounded-xl max-h-fit"
                     />
 
                     {isAuthor && (
