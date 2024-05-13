@@ -39,7 +39,7 @@ function Header() {
 
 
   return (
-    <header className='py-3 shadow dashboard sticky top-4 z-50 md:w-full'>
+    <header className='py-3 shadow dashboard sticky top-4 z-50'>
       <Container className=" md:w-full">
         <nav className=' items-center'>
 

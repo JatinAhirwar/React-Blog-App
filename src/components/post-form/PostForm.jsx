@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
-import loadingGif from '../../assets/loadingGif.webp';
 import { Button, Input, RTE, Select } from "..";
 import appwriteService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
@@ -12,8 +11,6 @@ export default function PostForm({ post }) {
     const [loading, setLoading] = useState(false);
 
     const postId = ID.unique();
-
-    console.log(postId);
 
     const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
         defaultValues: {
@@ -78,9 +75,9 @@ export default function PostForm({ post }) {
     //     return "";
     // }, []);
 
-    useEffect(() => {
-        setValue("slug", postId, {shouldValidate: true})
-    }, []);
+    // useEffect(() => {
+    //     setValue("slug", postId, {shouldValidate: true})
+    // }, []);
 
     // useEffect(() => {
     //     const subscription = watch((value, { name }) => {
@@ -93,7 +90,7 @@ export default function PostForm({ post }) {
     // }, []);
 
     return (
-        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap ">
+        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap w-full py-8 mt-4 text-center min-h-screen">
             <div className="w-2/3 px-2 ">
                 <Input
                     label="Title :"

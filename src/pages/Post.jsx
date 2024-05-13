@@ -4,7 +4,6 @@ import appwriteService from "../appwrite/config";
 import { Button, Container } from "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
-import '../App.css';
 
 
 export default function Post() {
@@ -35,7 +34,7 @@ export default function Post() {
     };
 
     return post ? (
-        <div className=" m-5">
+        <div className=" m-5 w-full py-8 mt-4 text-center min-h-screen">
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
                     <img
@@ -65,5 +64,6 @@ export default function Post() {
                     </div>
             </Container>
         </div>
-    ) : null;
+    ) : <div className='w-full py-8 mt-4 text-center min-h-screen'>Loading...</div>
+    
 }
