@@ -34,13 +34,13 @@ export default function Post() {
     };
 
     return post ? (
-        <div className=" m-5 w-full py-8 mt-4 text-center min-h-screen">
+        <div className=" m-5 py-8 mt-4 text-center min-h-screen">
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
                     <img
                         src={appwriteService.getFilePreview(post.featuredImage)}
                         alt={post.title}
-                        className="rounded-xl max-h-fit"
+                        className="rounded-xl max-h-96"
                     />
 
                     {isAuthor && (
