@@ -1,11 +1,20 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
+import loadingGif from '../../assets/loadingGif.webp';
 import { Button, Input, RTE, Select } from "..";
 import appwriteService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { ID } from "appwrite";
 
 export default function PostForm({ post }) {
+
+    const [loading, setLoading] = useState(false);
+
+    const postId = ID.unique();
+
+    console.log(postId);
+
     const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
         defaultValues: {
             title: post?.title || "",
@@ -26,6 +35,8 @@ export default function PostForm({ post }) {
                 appwriteService.deleteFile(post.featuredImage);
             }
 
+            setLoading(true);
+
             const dbPost = await appwriteService.updatePost(post.$id, {
                 ...data,
                 featuredImage: file ? file.$id : undefined,
@@ -35,13 +46,16 @@ export default function PostForm({ post }) {
                 navigate(`/post/${dbPost.$id}`);
             }
         } else {
+            console.log(data);
+            setLoading(true);
+
             const file = await appwriteService.uploadFile(data.image[0]);
 
             if (file) {
                 const fileId = file.$id;
                 data.featuredImage = fileId;
                 data.name = userData.name;
-                const dbPost = await appwriteService.createPost({ ...data, userId: userData.$id });
+                const dbPost = await appwriteService.createPost({ ...data, slug: postId, userId: userData.$id });
 
                 if (dbPost) {
                     navigate(`/post/${dbPost.$id}`);
@@ -52,31 +66,35 @@ export default function PostForm({ post }) {
         }
     };
 
-    const slugTransform = useCallback((value) => {
-        if (value && typeof value === "string")
-            return value
-                .trim()
-                .toLowerCase()
-                .replace(/[^a-zA-Z\d\s]+/g, "-")
-                .replace(/\s/g, "-")
-                .substring(0, 36);;
+    // const slugTransform = useCallback((value) => {
+    //     if (value && typeof value === "string")
+    //         return value
+    //             .trim()
+    //             .toLowerCase()
+    //             .replace(/[^a-zA-Z\d\s]+/g, "-")
+    //             .replace(/\s/g, "-")
+    //             .substring(0, 36);;
 
-        return "";
-    }, []);
+    //     return "";
+    // }, []);
 
     useEffect(() => {
-        const subscription = watch((value, { name }) => {
-            if (name === "title") {
-                setValue("slug", slugTransform(value.title), { shouldValidate: true });
-            }
-        });
+        setValue("slug", postId, {shouldValidate: true})
+    }, []);
 
-        return () => subscription.unsubscribe();
-    }, [watch, slugTransform, setValue]);
+    // useEffect(() => {
+    //     const subscription = watch((value, { name }) => {
+    //         if (name === "title") {
+    //             setValue("slug", slugTransform(value.title), { shouldValidate: true });
+    //         }
+    //     });
+
+    //     return () => subscription.unsubscribe();
+    // }, []);
 
     return (
-        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
-            <div className="w-2/3 px-2">
+        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap ">
+            <div className="w-2/3 px-2 ">
                 <Input
                     label="Title :"
                     placeholder="Title"
@@ -87,15 +105,18 @@ export default function PostForm({ post }) {
                     label="Slug :"
                     placeholder="Slug"
                     className="mb-4"
-                    disable
+                    disabled={true}
                     {...register("slug", { required: true, })}
-                    onInput={(e) => {
-                        setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
-                    }}
+                onInput={(e) => {
+                    setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
+                }}
+                value = {postId}
                 /> */}
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
             </div>
-            <div className="w-1/3 px-2">
+
+            <div className="w-1/3 px-2  ">
+
                 <Input
                     label="Featured Image :"
                     type="file"
@@ -103,6 +124,7 @@ export default function PostForm({ post }) {
                     accept="image/png, image/jpg, image/jpeg, image/gif"
                     {...register("image", { required: !post })}
                 />
+
                 {post && (
                     <div className="w-full mb-4">
                         <img
@@ -112,15 +134,18 @@ export default function PostForm({ post }) {
                         />
                     </div>
                 )}
+
                 <Select
                     options={["active", "inactive"]}
                     label="Status"
                     className="mb-4"
                     {...register("status", { required: true })}
                 />
-                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
-                    {post ? "Update" : "Submit"}
+
+                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full" disabled={loading}>
+                    {loading ? 'Uploading...' : (post ? "Update" : "Submit")} {/* Display loading text or button label */}
                 </Button>
+
             </div>
         </form>
     );

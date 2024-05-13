@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import appwriteService from "../appwrite/config";
 import {Container, PostCard} from '../components';
 import { useSelector } from 'react-redux';
+import '../App.css'
 
 function Home() {
     const [posts, setPosts] = useState([]);
