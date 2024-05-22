@@ -40,8 +40,8 @@ function Header() {
 
 
   return (
-    <header className='shadow sticky z-50'>
-      <Container>
+    <header className='  top-4 z-50'>
+      <Container className=" md:w-full">
         <nav className=' items-center'>
 
           {/* <div className='mr-4'>
@@ -56,7 +56,7 @@ function Header() {
                 <li key={item.name}>
                   <Link to={item.slug}
                     // onClick={() => navigate(item.slug)}
-                    className='duration-200 hover:bg-blue-100 rounded-full'
+                    className='inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
                   >{item.name}</Link>
                 </li>
               ) : null
