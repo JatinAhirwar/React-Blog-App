@@ -40,7 +40,7 @@ function Header() {
 
 
   return (
-    <header className='  top-4 z-50'>
+    <header className=' z-50'>
       <Container className=" md:w-full">
         <nav className=' items-center'>
 
@@ -50,13 +50,13 @@ function Header() {
               </Link>
           </div> */}
           
-          <ul className='flex ml-auto items-center justify-center gap-7'>
+          <ul className='flex ml-auto items-center justify-evenly'>
             {navItems.map((item) =>
               item.active ? (
                 <li key={item.name}>
                   <Link to={item.slug}
                     // onClick={() => navigate(item.slug)}
-                    className='inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
+                    className=' px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
                   >{item.name}</Link>
                 </li>
               ) : null
