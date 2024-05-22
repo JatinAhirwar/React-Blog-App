@@ -29,16 +29,16 @@ header {
     }
 
     nav {
-        border: 2px solid red;
+        /* border: 2px solid red; */
         justify-content: space-between;
     }
 
     ul {
-        border: 2px solid green;
+        /* border: 2px solid green; */
         gap: 1rem;
     }
 
     li {
-        border: 2px solid yellow;
+        /* border: 2px solid yellow; */
     }
 }
