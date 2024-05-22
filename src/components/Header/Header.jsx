@@ -3,7 +3,8 @@ import { Container, Logo, LogoutBtn } from '../index'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import '../../App.css'
+import '../../App.css';
+import './header.css';
 
 function Header() {
   const authStatus = useSelector((state) => state.auth.status);
@@ -39,8 +40,8 @@ function Header() {
 
 
   return (
-    <header className='py-3 shadow dashboard sticky top-4 z-50'>
-      <Container className=" md:w-full">
+    <header className='shadow sticky z-50'>
+      <Container>
         <nav className=' items-center'>
 
           {/* <div className='mr-4'>
@@ -55,7 +56,7 @@ function Header() {
                 <li key={item.name}>
                   <Link to={item.slug}
                     // onClick={() => navigate(item.slug)}
-                    className='inline-bock px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
+                    className='duration-200 hover:bg-blue-100 rounded-full'
                   >{item.name}</Link>
                 </li>
               ) : null
