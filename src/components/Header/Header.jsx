@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import '../../App.css';
-import './header.css';
+import './header.css'
 
 function Header() {
   const authStatus = useSelector((state) => state.auth.status);
@@ -40,7 +40,7 @@ function Header() {
 
 
   return (
-    <header className=' z-50 w-9/12'>
+    <header className=' headerr z-50'>
       <Container className=" md:w-full">
         <nav className=' items-center'>
 
@@ -56,7 +56,7 @@ function Header() {
                 <li key={item.name}>
                   <Link to={item.slug}
                     // onClick={() => navigate(item.slug)}
-                    className=' px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
+                    className='link duration-200 hover:bg-blue-100 rounded-full'
                   >{item.name}</Link>
                 </li>
               ) : null
