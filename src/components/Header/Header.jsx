@@ -34,13 +34,13 @@ function Header() {
     {
       name: "Add Post",
       slug: "/add-post",
-      active: authStatus,
+      active: true,
     },
   ];
 
 
   return (
-    <header className=' z-50'>
+    <header className=' z-50 w-9/12'>
       <Container className=" md:w-full">
         <nav className=' items-center'>
 

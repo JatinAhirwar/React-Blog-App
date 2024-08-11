@@ -5,7 +5,7 @@ import '../../App.css';
 
 function Footer() {
   return (
-    <section className=" dashboard relative overflow-hidden bg-transparent py-10 w-full rounded-none bottom-0">
+    <section className=" dashboard py-10 rounded-none bottom-0 w-full">
             <div className="relative z-10 mx-auto max-w-7xl px-4">
                 <div className="-m-6 flex flex-wrap">
                     <div className="w-full p-6 md:w-1/2 lg:w-5/12">

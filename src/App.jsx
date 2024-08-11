@@ -13,6 +13,7 @@ function App() {
   useEffect(() => {
     authService.getCurrentUser()
       .then((userData) => {
+        // console.log("app:: getCurrentUser",userData);
         if (userData) {
           dispatch(login({ userData }))
         } else {
@@ -23,8 +24,8 @@ function App() {
   }, [])
 
   return !loading ? (
-    <div className='min-h-screen flex flex-wrap content-between'>
-      <div className='w-full block'>
+    <div className='flex flex-wrap content-between w-full'>
+      <div className=' w-full'>
         <Header />
         <main>
           <Outlet />
