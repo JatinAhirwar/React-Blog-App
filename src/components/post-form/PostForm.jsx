@@ -91,8 +91,8 @@ export default function PostForm({ post }) {
     // }, []);
 
     return (
-        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap w-full py-8 mt-4 text-center min-h-screen">
-            <div className="w-2/3 px-2 ">
+        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap w-full py-8 mt-4 text-center min-h-screen flex-col sm:flex-row">
+            <div className="sm:w-2/3 w-full px-2">
                 <Input
                     label="Title :"
                     placeholder="Title"
@@ -113,7 +113,7 @@ export default function PostForm({ post }) {
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
             </div>
 
-            <div className="w-1/3 px-2  ">
+            <div className="sm:w-1/3 sm:px-2 w-full sm:mt-0  mt-8 ">
 
                 <Input
                     label="Featured Image :"

@@ -25,7 +25,7 @@ const handleImageUpload = (blobInfo, progress) => new Promise(async (resolve, re
 });
 
   return (
-    <div className='w-full'> 
+    <div className=' '> 
     {label && <label className='inline-block mb-1 pl-1'>{label}</label>}
 
     <Controller
