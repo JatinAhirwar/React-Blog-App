@@ -1,13 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-    status : false,
-    userData: null
-}
+// Initial state for authentication slice
+const initialAuthState = {
+    status: false,
+    userData: null,
+};
 
+// Initial state for posts slice
+const initialPostsState = {
+    posts: [],
+    loading: true
+};
+
+// Auth slice
 const authSlice = createSlice({
     name: "auth",
-    initialState,
+    initialState: initialAuthState,
     reducers: {
         login: (state, action) => {
             state.status = true;
@@ -16,10 +24,29 @@ const authSlice = createSlice({
         logout: (state) => {
             state.status = false;
             state.userData = null;
+        },
+    },
+});
+
+// Posts slice
+const postSlice = createSlice({
+    name: "posts",
+    initialState: initialPostsState,
+    reducers: {
+        setPosts: (state, action) => {
+            state.posts = action.payload;
+            state.loading = false;  // Set loading to false once posts are fetched
+        },
+        clearPosts: (state) => {
+            state.posts = [];
         }
-     }
-})
+    }
+});
 
-export const {login, logout} = authSlice.actions;
+// Export the actions from both slices
+export const { login, logout } = authSlice.actions;
+export const { setPosts } = postSlice.actions;
 
-export default authSlice.reducer;
+// Export the reducers for each slice
+export const authReducer = authSlice.reducer;
+export const postsReducer = postSlice.reducer;
