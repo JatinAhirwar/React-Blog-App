@@ -3,10 +3,28 @@ import {Editor } from '@tinymce/tinymce-react';
 import {Controller } from 'react-hook-form';
 import conf from '../conf/conf';
 import appwriteService from "../appwrite/config";
+import axios from 'axios';
 
 
+// Cloudinary image upload function
+const uploadImageToCloudinary = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "tyzwt8gj"); // Your Cloudinary upload preset
+  formData.append("cloud_name", "dom2vntvg"); // Your Cloudinary cloud name
 
-
+  try {
+      const response = await axios.post(
+          "https://api.cloudinary.com/v1_1/dom2vntvg/image/upload", // Cloudinary upload URL
+          formData
+      );
+      console.log("Upload Success:", response.data);
+      return response.data.secure_url; // Return the secure URL of the uploaded image
+  } catch (error) {
+      console.error("Error uploading to Cloudinary", error);
+      throw new Error("Image upload failed");
+  }
+};
 
 
 export default function RTE({name, control, label, defaultValue =""}) {
@@ -15,13 +33,16 @@ export default function RTE({name, control, label, defaultValue =""}) {
 const handleImageUpload = (blobInfo, progress) => new Promise(async (resolve, reject) => {
 
   const file = blobInfo.blob(); // Get the file from blobInfo
-  const uploadedFile = await appwriteService.uploadFile(file);
+  const uploadedFile = await uploadImageToCloudinary(file);
 
-  const fileName = appwriteService.getFilePreview(uploadedFile.$id);
-  console.log(uploadedFile);
-  console.log("file name:: ",fileName);
+  console.log("upload file rte mjjsx",uploadedFile);
+  
 
-  resolve(fileName.href);
+  // const fileName = appwriteService.getFilePreview(uploadedFile.$id);
+  // console.log(uploadedFile);
+  // console.log("file name:: ",fileName);
+
+  resolve(uploadedFile);
 });
 
   return (

@@ -1,17 +1,35 @@
-import React, { useCallback, useEffect, useId, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, RTE, Select } from "..";
-import appwriteService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ID } from "appwrite";
+import axios from "axios";
+import appwriteService from "../../appwrite/config";
+
+// Cloudinary image upload function
+const uploadImageToCloudinary = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "tyzwt8gj"); // Your Cloudinary upload preset
+    formData.append("cloud_name", "dom2vntvg"); // Your Cloudinary cloud name
+
+    try {
+        const response = await axios.post(
+            "https://api.cloudinary.com/v1_1/dom2vntvg/image/upload", // Cloudinary upload URL
+            formData
+        );
+        console.log("Upload Success:", response.data);
+        return response.data.secure_url; // Return the secure URL of the uploaded image
+    } catch (error) {
+        console.error("Error uploading to Cloudinary", error);
+        throw new Error("Image upload failed");
+    }
+};
 
 export default function PostForm({ post }) {
-
     const [loading, setLoading] = useState(false);
-
     const postId = ID.unique();
-
     const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
         defaultValues: {
             title: post?.title || "",
@@ -25,70 +43,54 @@ export default function PostForm({ post }) {
     const userData = useSelector((state) => state.auth.userData);
 
     const submit = async (data) => {
-        if (post) {
-            const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
+        setLoading(true);
 
-            if (file) {
-                appwriteService.deleteFile(post.featuredImage);
+        try {
+            let imageUrl = null;
+
+            if (data.image[0]) {
+                // Upload image to Cloudinary
+                imageUrl = await uploadImageToCloudinary(data.image[0]);
             }
 
-            setLoading(true);
+            if (post) {
+                // If updating, delete the old featured image from appwrite and update post
+                if (imageUrl) {
+                    // If appwrite service supports deleting images, call the delete method here
+                    appwriteService.deleteFile(post.featuredImage);
+                }
 
-            const dbPost = await appwriteService.updatePost(post.$id, {
-                ...data,
-                featuredImage: file ? file.$id : undefined,
-            });
-
-            if (dbPost) {
-                navigate(`/post/${dbPost.$id}`);
-            }
-        } else {
-            console.log(data);
-            setLoading(true);
-
-            const file = await appwriteService.uploadFile(data.image[0]);
-
-            if (file) {
-                const fileId = file.$id;
-                data.featuredImage = fileId;
-                data.name = userData.name;
-                const dbPost = await appwriteService.createPost({ ...data, slug: postId, userId: userData.$id });
+                const dbPost = await appwriteService.updatePost(post.$id, {
+                    ...data,
+                    featuredImage: imageUrl || post.featuredImage, // Set Cloudinary URL or keep the old one
+                });
 
                 if (dbPost) {
                     navigate(`/post/${dbPost.$id}`);
-                } 
-                
+                }
             } else {
-                console.log("image is required");
+                // If creating new post
+                const postData = {
+                    ...data,
+                    name: userData.name,
+                    slug: postId,
+                    userId: userData.$id,
+                    featuredImage: imageUrl, // Set Cloudinary URL
+                };
+
+                const dbPost = await appwriteService.createPost(postData);
+
+                if (dbPost) {
+                    navigate(`/post/${dbPost.$id}`);
+                }
             }
+        } catch (error) {
+            console.error("Error during image upload or post submission:", error);
+            alert("Something went wrong while submitting the post.");
+        } finally {
+            setLoading(false);
         }
     };
-
-    // const slugTransform = useCallback((value) => {
-    //     if (value && typeof value === "string")
-    //         return value
-    //             .trim()
-    //             .toLowerCase()
-    //             .replace(/[^a-zA-Z\d\s]+/g, "-")
-    //             .replace(/\s/g, "-")
-    //             .substring(0, 36);;
-
-    //     return "";
-    // }, []);
-
-    // useEffect(() => {
-    //     setValue("slug", postId, {shouldValidate: true})
-    // }, []);
-
-    // useEffect(() => {
-    //     const subscription = watch((value, { name }) => {
-    //         if (name === "title") {
-    //             setValue("slug", slugTransform(value.title), { shouldValidate: true });
-    //         }
-    //     });
-
-    //     return () => subscription.unsubscribe();
-    // }, []);
 
     return (
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap w-full py-8 mt-4 text-center min-h-screen flex-col sm:flex-row">
@@ -99,22 +101,10 @@ export default function PostForm({ post }) {
                     className="mb-4"
                     {...register("title", { required: true })}
                 />
-                {/* <Input
-                    label="Slug :"
-                    placeholder="Slug"
-                    className="mb-4"
-                    disabled={true}
-                    {...register("slug", { required: true, })}
-                onInput={(e) => {
-                    setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
-                }}
-                value = {postId}
-                /> */}
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
             </div>
 
-            <div className="sm:w-1/3 sm:px-2 w-full sm:mt-0  mt-8 ">
-
+            <div className="sm:w-1/3 sm:px-2 w-full sm:mt-0 mt-8">
                 <Input
                     label="Featured Image :"
                     type="file"
@@ -126,7 +116,7 @@ export default function PostForm({ post }) {
                 {post && (
                     <div className="w-full mb-4">
                         <img
-                            src={appwriteService.getFilePreview(post.featuredImage)}
+                            src={post.featuredImage}
                             alt={post.title}
                             className="rounded-lg"
                         />
@@ -141,9 +131,8 @@ export default function PostForm({ post }) {
                 />
 
                 <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full" disabled={loading}>
-                    {loading ? 'Uploading...' : (post ? "Update" : "Submit")} {/* Display loading text or button label */}
+                    {loading ? "Uploading..." : post ? "Update" : "Submit"}
                 </Button>
-
             </div>
         </form>
     );

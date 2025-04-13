@@ -11,7 +11,7 @@ function PostCard({ $id, title, featuredImage, name }) {
         <div className='w-full justify-center mb-4 flex'
           style={{ height:'10rem'}}
         >
-          <img src={appwriteService.getFilePreview(featuredImage)} alt={title}
+          <img src={featuredImage} alt={title}
             
             className='rounded-xl h-40' />
         </div>
